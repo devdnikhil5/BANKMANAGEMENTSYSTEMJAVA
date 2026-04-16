@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Bank Management System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>🏦 Bank Admin</h2>
+                <p id="adminUsername">Admin</p>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="nav-link active" data-section="managers">👥 Managers</a></li>
+                    <li><a href="#" class="nav-link" data-section="users">👤 All Users</a></li>
+                    <li><a href="#" class="nav-link" data-section="statistics">📊 Statistics</a></li>
+                    <li><a href="#" class="nav-link" data-section="settings">⚙️ Settings</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn btn-outline-light btn-block">🚪 Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Managers Section -->
+            <section id="managers-section" class="content-section active">
+                <div class="section-header">
+                    <h1>Manage Managers</h1>
+                    <button class="btn btn-primary" id="addManagerBtn">➕ Add New Manager</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table" id="managersTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="managersTableBody">
+                            <!-- Dynamically populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- All Users Section -->
+            <section id="users-section" class="content-section">
+                <div class="section-header">
+                    <h1>All Users Overview</h1>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table" id="allUsersTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Full Name</th>
+                                <th>Account Number</th>
+                                <th>Balance</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allUsersTableBody">
+                            <!-- Dynamically populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section id="statistics-section" class="content-section">
+                <div class="section-header">
+                    <h1>System Statistics</h1>
+                    <button class="btn btn-outline" id="refreshStatsBtn">🔄 Refresh</button>
+                </div>
+                <div class="stats-grid" id="statsContainer">
+                    <!-- Stats cards dynamically inserted -->
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="content-section">
+                <div class="section-header">
+                    <h1>Settings</h1>
+                </div>
+                <div class="settings-card">
+                    <h3>Change Admin Password</h3>
+                    <form id="changePasswordForm">
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password</label>
+                            <input type="password" id="currentPassword" name="currentPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" name="newPassword" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Password</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for Add/Edit Manager -->
+    <div id="managerModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modalTitle">Add New Manager</h2>
+            <form id="managerForm">
+                <input type="hidden" id="managerId">
+                <div class="form-group">
+                    <label for="managerUsername">Username *</label>
+                    <input type="text" id="managerUsername" name="username" required minlength="3" maxlength="20">
+                </div>
+                <div class="form-group">
+                    <label for="managerFullName">Full Name *</label>
+                    <input type="text" id="managerFullName" name="fullName" required>
+                </div>
+                <div class="form-group">
+                    <label for="managerEmail">Email *</label>
+                    <input type="email" id="managerEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="managerPassword">Password <span id="passwordOptional">*</span></label>
+                    <input type="password" id="managerPassword" name="password" minlength="6">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="managerActive" name="active" checked> Active
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" id="cancelModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Manager</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal for Delete -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content modal-small">
+            <h3>Confirm Delete</h3>
+            <p>Are you sure you want to delete this manager? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn btn-outline" id="cancelDeleteBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastMessage" class="toast"></div>
+
+    <script src="/js/admin.js"></script>
+</body>
+</html>

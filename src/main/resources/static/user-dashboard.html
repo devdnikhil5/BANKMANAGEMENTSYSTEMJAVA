@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Bank Management System</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>👤 My Account</h2>
+                <p id="userUsername">User</p>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="nav-link active" data-section="overview">📊 Overview</a></li>
+                    <li><a href="#" class="nav-link" data-section="transactions">💸 New Transaction</a></li>
+                    <li><a href="#" class="nav-link" data-section="history">📜 History</a></li>
+                    <li><a href="#" class="nav-link" data-section="pending">⏳ Pending</a></li>
+                    <li><a href="#" class="nav-link" data-section="profile">⚙️ Profile</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn btn-outline-light btn-block">🚪 Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Overview Section -->
+            <section id="overview-section" class="content-section active">
+                <div class="welcome-banner">
+                    <h1>Welcome, <span id="displayFullName">User</span>!</h1>
+                    <p class="last-login">Account overview as of today</p>
+                </div>
+                <div class="balance-card">
+                    <h2>Available Balance</h2>
+                    <p class="balance-amount" id="accountBalance">$0.00</p>
+                    <p class="account-number">Account: <span id="accountNumber">N/A</span></p>
+                </div>
+                <div class="quick-actions">
+                    <button class="btn btn-primary quick-action" data-action="deposit">💰 Deposit</button>
+                    <button class="btn btn-primary quick-action" data-action="withdraw">💸 Withdraw</button>
+                    <button class="btn btn-primary quick-action" data-action="transfer">🔄 Transfer</button>
+                </div>
+                <div class="recent-transactions">
+                    <h3>Recent Transactions</h3>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentTransactionsBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- New Transaction Section -->
+            <section id="transactions-section" class="content-section">
+                <div class="section-header">
+                    <h1>Make a Transaction</h1>
+                </div>
+                <div class="transaction-tabs">
+                    <button class="tab-btn active" data-tab="deposit">Deposit</button>
+                    <button class="tab-btn" data-tab="withdraw">Withdraw</button>
+                    <button class="tab-btn" data-tab="transfer">Transfer</button>
+                </div>
+
+                <!-- Deposit Form -->
+                <div id="deposit-tab" class="tab-content active">
+                    <form id="depositForm" class="transaction-form">
+                        <div class="form-group">
+                            <label for="depositAmount">Amount ($)</label>
+                            <input type="number" id="depositAmount" name="amount" step="0.01" min="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="depositDescription">Description (optional)</label>
+                            <input type="text" id="depositDescription" name="description">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Deposit Request</button>
+                        <p class="info-note">All deposits require manager approval before funds are credited.</p>
+                    </form>
+                </div>
+
+                <!-- Withdraw Form -->
+                <div id="withdraw-tab" class="tab-content">
+                    <form id="withdrawForm" class="transaction-form">
+                        <div class="form-group">
+                            <label for="withdrawAmount">Amount ($)</label>
+                            <input type="number" id="withdrawAmount" name="amount" step="0.01" min="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="withdrawDescription">Description (optional)</label>
+                            <input type="text" id="withdrawDescription" name="description">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Withdrawal Request</button>
+                        <p class="info-note">Withdrawals require manager approval. Ensure sufficient balance.</p>
+                    </form>
+                </div>
+
+                <!-- Transfer Form -->
+                <div id="transfer-tab" class="tab-content">
+                    <form id="transferForm" class="transaction-form">
+                        <div class="form-group">
+                            <label for="transferAmount">Amount ($)</label>
+                            <input type="number" id="transferAmount" name="amount" step="0.01" min="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipientAccount">Recipient Account Number</label>
+                            <input type="text" id="recipientAccount" name="recipientAccountNumber" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="transferDescription">Description (optional)</label>
+                            <input type="text" id="transferDescription" name="description">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Transfer Request</button>
+                        <p class="info-note">Transfers require manager approval and are processed upon approval.</p>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Transaction History Section -->
+            <section id="history-section" class="content-section">
+                <div class="section-header">
+                    <h1>Transaction History</h1>
+                    <button class="btn btn-outline" id="refreshHistoryBtn">🔄 Refresh</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table" id="historyTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>From/To</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Pending Transactions Section -->
+            <section id="pending-section" class="content-section">
+                <div class="section-header">
+                    <h1>Pending Approvals</h1>
+                    <button class="btn btn-outline" id="refreshPendingBtn">🔄 Refresh</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="data-table" id="pendingUserTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Details</th>
+                                <th>Requested</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendingUserTableBody">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <p class="info-note">Pending transactions are awaiting manager approval.</p>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile-section" class="content-section">
+                <div class="section-header">
+                    <h1>Profile Settings</h1>
+                </div>
+                <div class="profile-card">
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" id="profileUsername" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="profileFullName" name="fullName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="profileEmail" name="email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </form>
+                    <hr>
+                    <h3>Change Password</h3>
+                    <form id="changePasswordForm">
+                        <div class="form-group">
+                            <label>Current Password</label>
+                            <input type="password" id="currentPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" id="newPassword" required minlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm New Password</label>
+                            <input type="password" id="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Change Password</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="toastMessage" class="toast"></div>
+
+    <script src="/js/user.js"></script>
+</body>
+</html>

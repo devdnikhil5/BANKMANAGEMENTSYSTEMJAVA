@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Management System - Home</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏦 Bank Management System</h1>
+            <p class="subtitle">Secure • Role-Based • Transaction Approval Workflow</p>
+        </header>
+
+        <main>
+            <div class="welcome-card">
+                <h2>Welcome to the Bank Management Portal</h2>
+                <p class="description">
+                    Our system provides three distinct roles: <strong>Admin</strong>, <strong>Manager</strong>, and <strong>User</strong>.
+                    All transactions require manager approval before processing.
+                </p>
+
+                <div class="role-grid">
+                    <div class="role-card admin">
+                        <h3>👑 Admin</h3>
+                        <p>Create and manage managers. Full system oversight.</p>
+                        <span class="badge">Highest Access</span>
+                    </div>
+                    <div class="role-card manager">
+                        <h3>📋 Manager</h3>
+                        <p>Manage users, approve/reject transactions, track accounts.</p>
+                        <span class="badge">Operational Control</span>
+                    </div>
+                    <div class="role-card user">
+                        <h3>👤 User</h3>
+                        <p>Deposit, withdraw, transfer funds. View transaction history.</p>
+                        <span class="badge">Customer</span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="/login.html" class="btn btn-primary">🔐 Login to Dashboard</a>
+                    <a href="#features" class="btn btn-outline">Learn More ↓</a>
+                </div>
+            </div>
+
+            <section id="features" class="features-section">
+                <h2>Key Features</h2>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <span class="feature-icon">✅</span>
+                        <h3>Manager Approval Workflow</h3>
+                        <p>Every deposit, withdrawal, and transfer requires explicit manager approval before funds are moved.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🔒</span>
+                        <h3>Role-Based Access Control</h3>
+                        <p>Strict separation of duties: Admin manages managers, managers handle users, users transact.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📊</span>
+                        <h3>Real-Time Tracking</h3>
+                        <p>Managers see pending approvals instantly; users track transaction statuses in their dashboard.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🛡️</span>
+                        <h3>Spring Security + JWT</h3>
+                        <p>Stateless authentication with secure token-based authorization.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <br><br>
+        <footer>
+            <p style="text-align: center;">&copy; 2025 Bank Management System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Optional: Check if already logged in and redirect
+        const token = localStorage.getItem('token');
+        if (token) {
+            // Optionally redirect to appropriate dashboard based on role
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    if (user.roles.includes('ROLE_ADMIN')) {
+                        window.location.href = '/admin-dashboard.html';
+                    } else if (user.roles.includes('ROLE_MANAGER')) {
+                        window.location.href = '/manager-dashboard.html';
+                    } else if (user.roles.includes('ROLE_USER')) {
+                        window.location.href = '/user-dashboard.html';
+                    }
+                } catch(e) {}
+            }
+        }
+    </script>
+</body>
+</html>
